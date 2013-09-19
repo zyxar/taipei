@@ -1,4 +1,4 @@
-package main
+package taipei
 
 import (
 	"crypto/sha1"
@@ -18,13 +18,14 @@ type testFile struct {
 }
 
 var tests []testFile = []testFile{{
-	"testData/file",
-	1024,
-	"A0AD08765665C1339E2F829F4EBFF598B355A62B",
+	"testData/a.torrent",
+	2374,
+	// "A0AD08765665C1339E2F829F4EBFF598B355A62B",
+	"A5B4170D1BF93CDDDADD0D774B74F67ED8DCD6E1",
 	// dd if=testdata/file bs=25 count=1 | shasum
-	"4582F29D1C80210E6B1D4BACF772572E6F4518FB",
+	"673E4A9C2160110032CF7E4E630F04FDB3AFD6B7",
 	// dd if=testdata/file bs=25 count=1 skip=1 | shasum
-	"2676C88B22E905E9DC0BD437533ED69E5D899EF4",
+	"7FF36FA218F99E6D847EBEFD1E58E48E5DBA0C56",
 }}
 
 func mkFileStore(tf testFile) (fs *fileStore, err error) {

@@ -1,17 +1,13 @@
-package main
+package taipei
 
 import (
 	"bytes"
 	"crypto/sha1"
 	"errors"
 	"io"
-	"io/ioutil"
-	"log"
 	"os"
-	"strings"
-	"time"
 
-	bencode "code.google.com/p/bencode-go"
+	"code.google.com/p/bencode-go"
 )
 
 type FileDict struct {
@@ -51,23 +47,10 @@ func getString(m map[string]interface{}, k string) string {
 	return ""
 }
 
-func getMetaInfo(torrent string) (metaInfo *MetaInfo, err error) {
+func GetMetaInfo(torrent string) (metaInfo *MetaInfo, err error) {
 	var input io.ReadCloser
-	if strings.HasPrefix(torrent, "http:") {
-		r, err := proxyHttpGet(torrent)
-		if err != nil {
-			return nil, err
-		}
-		input = r.Body
-	} else if strings.HasPrefix(torrent, "magnet:") {
-		input, err = torrentFromMagnet(torrent)
-		if err != nil {
-			return
-		}
-	} else {
-		if input, err = os.Open(torrent); err != nil {
-			return
-		}
+	if input, err = os.Open(torrent); err != nil {
+		return
 	}
 
 	// We need to calcuate the sha1 of the Info map, including every value in the
@@ -113,47 +96,5 @@ func getMetaInfo(torrent string) (metaInfo *MetaInfo, err error) {
 	m2.Encoding = getString(topMap, "encoding")
 
 	metaInfo = &m2
-	return
-}
-
-type TrackerResponse struct {
-	FailureReason  string "failure reason"
-	WarningMessage string "warning message"
-	Interval       time.Duration
-	MinInterval    time.Duration "min interval"
-	TrackerId      string        "tracker id"
-	Complete       int
-	Incomplete     int
-	Peers          string
-}
-
-type SessionInfo struct {
-	PeerId     string
-	Port       int
-	Uploaded   int64
-	Downloaded int64
-	Left       int64
-}
-
-func getTrackerInfo(url string) (tr *TrackerResponse, err error) {
-	r, err := proxyHttpGet(url)
-	if err != nil {
-		return
-	}
-	defer r.Body.Close()
-	if r.StatusCode >= 400 {
-		data, _ := ioutil.ReadAll(r.Body)
-		reason := "Bad Request " + string(data)
-		log.Println(reason)
-		err = errors.New(reason)
-		return
-	}
-	var tr2 TrackerResponse
-	err = bencode.Unmarshal(r.Body, &tr2)
-	r.Body.Close()
-	if err != nil {
-		return
-	}
-	tr = &tr2
 	return
 }

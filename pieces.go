@@ -1,5 +1,5 @@
 // Compute missing pieces for a torrent.
-package main
+package taipei
 
 import (
 	"crypto/sha1"
@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-func checkPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, goodBits *Bitset, err error) {
+func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, goodBits *Bitset, err error) {
 	pieceLength := m.Info.PieceLength
 	numPieces := int((totalLength + pieceLength - 1) / pieceLength)
 	goodBits = NewBitset(int(numPieces))
@@ -96,7 +96,7 @@ func hashPiece(h chan chunk, result chan chunk) {
 	}
 }
 
-func checkPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (good bool, err error) {
+func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (good bool, err error) {
 	ref := m.Info.Pieces
 	currentSum, err := computePieceSum(fs, totalLength, m.Info.PieceLength, pieceIndex)
 	if err != nil {

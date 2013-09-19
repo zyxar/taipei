@@ -1,4 +1,4 @@
-package main
+package taipei
 
 import (
 	"crypto/sha1"
