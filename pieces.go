@@ -2,6 +2,7 @@
 package taipei
 
 import (
+	"bytes"
 	"crypto/sha1"
 	"errors"
 	"fmt"
@@ -24,7 +25,7 @@ func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, g
 	for i := 0; i < numPieces; i++ {
 		base := i * sha1.Size
 		end := base + sha1.Size
-		if checkEqual([]byte(ref[base:end]), currentSums[base:end]) {
+		if bytes.Compare([]byte(ref[base:end]), currentSums[base:end]) == 0 {
 			good++
 			goodBits.Set(int(i))
 		} else {
@@ -32,15 +33,6 @@ func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, g
 		}
 	}
 	return
-}
-
-func checkEqual(ref, current []byte) bool {
-	for i := 0; i < len(current); i++ {
-		if ref[i] != current[i] {
-			return false
-		}
-	}
-	return true
 }
 
 type chunk struct {
@@ -105,7 +97,7 @@ func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (g
 	base := pieceIndex * sha1.Size
 	end := base + sha1.Size
 	refSha1 := []byte(ref[base:end])
-	good = checkEqual(refSha1, currentSum)
+	good = (bytes.Compare(refSha1, currentSum) == 0)
 	if !good {
 		err = fmt.Errorf("reference sha1: %v != piece sha1: %v", refSha1, currentSum)
 	}

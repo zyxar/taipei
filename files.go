@@ -92,6 +92,15 @@ func NewFileStore(info *InfoDict, storePath string) (f FileStore, totalSize int6
 	return
 }
 
+func MkFileStore(fd *os.File) (fs FileStore, err error) {
+	stat, err := fd.Stat()
+	if err != nil {
+		return
+	}
+	f := fileEntry{stat.Size(), fd}
+	return &fileStore{[]int64{0}, []fileEntry{f}}, nil
+}
+
 func (f *fileStore) find(offset int64) int {
 	// Binary search
 	offsets := f.offsets

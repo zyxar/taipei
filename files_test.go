@@ -18,14 +18,14 @@ type testFile struct {
 }
 
 var tests []testFile = []testFile{{
-	"testData/a.torrent",
-	2374,
+	"testData/test1.zip",
+	1024,
 	// "A0AD08765665C1339E2F829F4EBFF598B355A62B",
-	"A5B4170D1BF93CDDDADD0D774B74F67ED8DCD6E1",
+	"76BCDE224CB19164B40AE06B2606A9F583C1C9BE",
 	// dd if=testdata/file bs=25 count=1 | shasum
-	"673E4A9C2160110032CF7E4E630F04FDB3AFD6B7",
+	"194F7B8DD0A5B339440D2397BA5251EBD3A52D5D",
 	// dd if=testdata/file bs=25 count=1 skip=1 | shasum
-	"7FF36FA218F99E6D847EBEFD1E58E48E5DBA0C56",
+	"51535521A5F1CA1DB3D215A1A5EC57F54B4C844A",
 }}
 
 func mkFileStore(tf testFile) (fs *fileStore, err error) {
