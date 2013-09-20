@@ -17,7 +17,7 @@ func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, g
 		err = errors.New("Incorrect Info.Pieces length")
 		return
 	}
-	currentSums, err := computeSums(fs, totalLength, m.Info.PieceLength)
+	currentSums, err := ComputeSums(fs, totalLength, m.Info.PieceLength)
 	if err != nil {
 		return
 	}
@@ -48,10 +48,10 @@ type chunk struct {
 	data []byte
 }
 
-// computeSums reads the file content and computes the SHA1 hash for each
+// ComputeSums reads the file content and computes the SHA1 hash for each
 // piece. Spawns parallel goroutines to compute the hashes, since each
 // computation takes ~30ms.
-func computeSums(fs FileStore, totalLength int64, pieceLength int64) (sums []byte, err error) {
+func ComputeSums(fs FileStore, totalLength int64, pieceLength int64) (sums []byte, err error) {
 	// Calculate the SHA1 hash for each piece in parallel goroutines.
 	hashes := make(chan chunk)
 	results := make(chan chunk, 3)
@@ -98,7 +98,7 @@ func hashPiece(h chan chunk, result chan chunk) {
 
 func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (good bool, err error) {
 	ref := m.Info.Pieces
-	currentSum, err := computePieceSum(fs, totalLength, m.Info.PieceLength, pieceIndex)
+	currentSum, err := ComputePieceSum(fs, totalLength, m.Info.PieceLength, pieceIndex)
 	if err != nil {
 		return
 	}
@@ -112,7 +112,7 @@ func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (g
 	return
 }
 
-func computePieceSum(fs FileStore, totalLength int64, pieceLength int64, pieceIndex int) (sum []byte, err error) {
+func ComputePieceSum(fs FileStore, totalLength int64, pieceLength int64, pieceIndex int) (sum []byte, err error) {
 	numPieces := (totalLength + pieceLength - 1) / pieceLength
 	hasher := sha1.New()
 	piece := make([]byte, pieceLength)

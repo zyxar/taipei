@@ -13,7 +13,7 @@ func TestComputeSums(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		sums, err := computeSums(fs, testFile.fileLen, pieceLen)
+		sums, err := ComputeSums(fs, testFile.fileLen, pieceLen)
 		if err != nil {
 			t.Fatal(err)
 		}
