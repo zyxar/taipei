@@ -6,6 +6,7 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
+	"os"
 	"runtime"
 )
 
@@ -92,6 +93,10 @@ func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (g
 	ref := m.Info.Pieces
 	currentSum, err := ComputePieceSum(fs, totalLength, m.Info.PieceLength, pieceIndex)
 	if err != nil {
+		if err == os.ErrInvalid {
+			good = true
+			err = errors.New("Missing file for critical piece.")
+		}
 		return
 	}
 	base := pieceIndex * sha1.Size
