@@ -1,71 +1,30 @@
-Taipei Torrent
-==============
+# Taipei Torrent Stripped Library
 
-This is a simple command-line-interface BitTorrent client coded in the go
-programming language.
 
-FAQ:
-----
+This is a simple BitTorrent library stripped from [Taipei-Torrent](https://github.com/jackpal/Taipei-Torrent)
 
-Q: Why call it Taipei Torrent?
+[![Build Status](https://travis-ci.org/zyxar/taipei.png?branch=master)](https://travis-ci.org/zyxar/taipei)
 
-A: jackpal started writing it while visiting Taipei, Taiwan
+See original [README](https://github.com/jackpal/Taipei-Torrent/blob/master/README.md).
 
-Q: What is the license?
 
-A: See the LICENSE file.
+## Why library?
 
-Current Status
---------------
+I use this in my [xltask](https://github.com/zyxar/xltask) project, for validating `.torrent` file, and verifying file contents.
 
-Tested on Windows, Linux and Mac OSX.
+## Instructions 
 
-Development Roadmap
--------------------
+1. Use `go get`
 
-+  Support magnet links
-+  Implement choke/unchoke logic
-+  Full UPnP support (need to be able to search for an unused listener port,
-   detect we have already acquired the port,
-   release the listener port when we quit.)
-+  Clean up source code
-+  Deal with TODOs
-+  Add a way of quitting other than typing control-C
+      go get -v -u github.com/zyxar/taipei
 
-Download, Install, and Build Instructions
------------------------------------------
 
-1. Download and install the Go One environment from http://golang.org
+2. Use `git`
 
-2. Use the "go" command to download, install, and build the Taipei-Torrent
-app:
+      git clone https://github.com/zyxar/taipei
+      cd taipei
+      go install
 
-    go get github.com/jackpal/Taipei-Torrent
+3. Documentation
 
-Usage Instructions
-------------------
-
-    Taipei-Torrent mydownload.torrent
-
-or
-
-    Taipei-Torrent -help
-
-Third-party Packages
---------------------
-
-http://code.google.com/p/bencode-go - Bencode encoder/decoder
-
-http://code.google.com/p/go-nat-pmp - NAT-PMP firewall client
-
-https://github.com/hailiang/gosocks - SOCKS5 proxy support
-
-https://github.com/nictuku/dht      - Distributed Hash Table
-
-https://github.com/nictuku/nettools - Network utilities
-
-Related Projects
-----------------
-
-https://github.com/nictuku/Taipei-Torrent is an active fork.
-
+  See [godoc](http://godoc.org/github.com/zyxar/taipei)
