@@ -16,14 +16,14 @@ I use this in my [xltask](https://github.com/zyxar/xltask) project, for validati
 
 1. Use `go get`
 
-      go get -v -u github.com/zyxar/taipei
+        go get -v -u github.com/zyxar/taipei
 
 
 2. Use `git`
 
-      git clone https://github.com/zyxar/taipei
-      cd taipei
-      go install
+        git clone https://github.com/zyxar/taipei
+        cd taipei
+        go install
 
 3. Documentation
 
