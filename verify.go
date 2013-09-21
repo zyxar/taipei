@@ -1,11 +1,47 @@
 package taipei
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 )
+
+var (
+	echo = false
+)
+
+func SetEcho(b bool) {
+	echo = b
+}
+
+func ProgressBar(i, j int) string {
+	if i > j {
+		i = j
+	}
+	bs := i * 20 / j
+	ps := float32(i) / float32(j) * 100
+	ls := float32(i)*20/float32(j) - float32(bs)
+	var bf bytes.Buffer
+	var k int
+	bf.WriteByte('[')
+	for k = 0; k < bs; k++ {
+		bf.WriteByte('=')
+	}
+	if ls > 0.5 {
+		bf.WriteByte('-')
+		k++
+	}
+	for k < 20 {
+		bf.WriteByte(' ')
+		k++
+	}
+	bf.WriteByte(']')
+	bf.WriteString(fmt.Sprintf(" %.2f%%", ps))
+	return bf.String()
+}
 
 func VerifyContent(m *MetaInfo, root string) (bool, error) {
 	n := len(m.Info.Files)

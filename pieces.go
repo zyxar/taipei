@@ -72,6 +72,12 @@ func ComputeSums(fs FileStore, totalLength int64, pieceLength int64) (sums []byt
 	for i := int64(0); i < numPieces; i++ {
 		h := <-results
 		copy(sums[h.i*sha1.Size:], h.data)
+		if echo {
+			fmt.Printf("%s\r", ProgressBar(int(i+1), int(numPieces)))
+		}
+	}
+	if echo {
+		fmt.Println()
 	}
 	return
 }

@@ -5,6 +5,7 @@ import (
 )
 
 func TestSingleMode(t *testing.T) {
+	SetEcho(true)
 	m, err := GetMetaInfo("testData/test1.torrent")
 	if err != nil {
 		t.Errorf(err.Error())
@@ -12,9 +13,11 @@ func TestSingleMode(t *testing.T) {
 	if v, _ := VerifySingle(m, "testData"); v == false {
 		t.Errorf("Verify Content failed.")
 	}
+	SetEcho(false)
 }
 
 func TestFullMode(t *testing.T) {
+	SetEcho(true)
 	m, err := GetMetaInfo("testData/test2.torrent")
 	if err != nil {
 		t.Errorf(err.Error())
@@ -22,6 +25,7 @@ func TestFullMode(t *testing.T) {
 	if v, _ := VerifyFull(m, "testData"); v == false {
 		t.Errorf("Verify Content failed.")
 	}
+	SetEcho(false)
 }
 
 func TestPartialMode1(t *testing.T) {
