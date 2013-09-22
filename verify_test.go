@@ -47,3 +47,29 @@ func TestPartialMode2(t *testing.T) {
 		t.Errorf("Verify Content failed.")
 	}
 }
+
+func TestContent(t *testing.T) {
+	SetEcho(true)
+	m, err := GetMetaInfo("testData/test1.torrent")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	if v, _ := VerifyContent(m, "testData"); v == false {
+		t.Errorf("Verify Content failed.")
+	}
+	m, err = GetMetaInfo("testData/test2.torrent")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	if v, _ := VerifyContent(m, "testData"); v == false {
+		t.Errorf("Verify Content failed.")
+	}
+	m, err = GetMetaInfo("testData/test3.torrent")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	if v, _ := VerifyContent(m, "testData"); v == false {
+		t.Errorf("Verify Content failed.")
+	}
+	SetEcho(false)
+}

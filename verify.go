@@ -48,7 +48,15 @@ func VerifyContent(m *MetaInfo, root string) (bool, error) {
 	if n == 0 {
 		return VerifySingle(m, root)
 	}
-	return VerifyPartial(m, root)
+	for i, _ := range m.Info.Files {
+		src := &m.Info.Files[i]
+		fullPath := filepath.Join(root, filepath.Clean(filepath.Join(src.Path...)))
+		_, err := os.Stat(fullPath)
+		if err != nil {
+			return VerifyPartial(m, root)
+		}
+	}
+	return VerifyFull(m, root)
 }
 
 func VerifySingle(m *MetaInfo, root string) (bool, error) {
