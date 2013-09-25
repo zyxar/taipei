@@ -31,7 +31,7 @@ func ProgressBar(i, j int) string {
 		bf.WriteByte('=')
 	}
 	if ls > 0.5 {
-		bf.WriteByte('-')
+		bf.WriteByte('>')
 		k++
 	}
 	for k < 20 {
