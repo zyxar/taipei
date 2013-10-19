@@ -82,7 +82,7 @@ func VerifySingle(m *MetaInfo, root string) (bool, error) {
 	} else {
 		return false, errors.New("Torrent has multiple file structure.")
 	}
-	g, b, _, err := CheckPieces(fs, size, m)
+	g, b, err := CheckPieces(fs, size, m)
 	if err != nil {
 		return false, err
 	}
@@ -115,11 +115,11 @@ func VerifyFull(m *MetaInfo, root string) (bool, error) {
 			}
 			defer fd.Close()
 			fs.files = append(fs.files, fileEntry{src.Length, fd})
-			fs.offsets = append(fs.offsets, src.Length*int64(i))
+			fs.offsets = append(fs.offsets, size)
 			size += src.Length
 		}
 	}
-	g, b, _, err := CheckPieces(fs, size, m)
+	g, b, err := CheckPieces(fs, size, m)
 	if err != nil {
 		return false, err
 	}
@@ -155,7 +155,7 @@ func VerifyPartial(m *MetaInfo, root string) (bool, error) {
 				defer fd.Close()
 			}
 			fs.files = append(fs.files, fileEntry{src.Length, fd})
-			fs.offsets = append(fs.offsets, src.Length*int64(i))
+			fs.offsets = append(fs.offsets, size)
 			size += src.Length
 		}
 	}

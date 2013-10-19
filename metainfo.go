@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha1"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -14,6 +15,10 @@ type FileDict struct {
 	Length int64
 	Path   []string
 	Md5sum string
+}
+
+func (f FileDict) String() string {
+	return fmt.Sprintf("%d\r\t\t%v\r\t\t\t\t%X", f.Length, f.Path, f.Md5sum)
 }
 
 type InfoDict struct {
@@ -28,6 +33,17 @@ type InfoDict struct {
 	Files []FileDict
 }
 
+func (i InfoDict) String() string {
+	if len(i.Files) == 0 {
+		return fmt.Sprintf("Name: %v\tPieceLength: %d\nSize: %d", i.Name, i.PieceLength, i.Length)
+	}
+	r := fmt.Sprintf("Name: %v\tPieceLength: %d\nSize\r\t\tFilename", i.Name, i.PieceLength)
+	for j, _ := range i.Files {
+		r += fmt.Sprintf("\n%v", i.Files[j])
+	}
+	return r
+}
+
 type MetaInfo struct {
 	Info         InfoDict
 	InfoHash     string
@@ -36,6 +52,10 @@ type MetaInfo struct {
 	Comment      string
 	CreatedBy    string "created by"
 	Encoding     string
+}
+
+func (m MetaInfo) String() string {
+	return fmt.Sprintf("%v\n%X\t%s", m.Info, m.InfoHash, m.Encoding)
 }
 
 func getString(m map[string]interface{}, k string) string {

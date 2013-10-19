@@ -10,16 +10,16 @@ import (
 	"runtime"
 )
 
-func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, goodBits *Bitset, err error) {
+func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int /*goodBits *Bitset,*/, err error) {
 	pieceLength := m.Info.PieceLength
 	numPieces := int((totalLength + pieceLength - 1) / pieceLength)
-	goodBits = NewBitset(int(numPieces))
+	// goodBits = NewBitset(int(numPieces))
 	ref := m.Info.Pieces
 	if len(ref) != numPieces*sha1.Size {
 		err = errors.New("Incorrect Info.Pieces length")
 		return
 	}
-	currentSums, err := ComputeSums(fs, totalLength, m.Info.PieceLength)
+	currentSums, err := ComputeSums(fs, totalLength, pieceLength)
 	if err != nil {
 		return
 	}
@@ -28,8 +28,11 @@ func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int, g
 		end := base + sha1.Size
 		if bytes.Compare([]byte(ref[base:end]), currentSums[base:end]) == 0 {
 			good++
-			goodBits.Set(int(i))
+			// goodBits.Set(int(i))
 		} else {
+			if v, ok := fs.(*fileStore); ok {
+				fmt.Printf("[%d]: %s\n", i, v.files[v.find(int64(i)*pieceLength)].fd.Name())
+			}
 			bad++
 		}
 	}
