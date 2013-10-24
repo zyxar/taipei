@@ -10,6 +10,8 @@ import (
 	"runtime"
 )
 
+var missingPieceErr error = errors.New("Missing file for critical piece")
+
 func CheckPieces(fs FileStore, totalLength int64, m *MetaInfo) (good, bad int /*goodBits *Bitset,*/, err error) {
 	pieceLength := m.Info.PieceLength
 	numPieces := int((totalLength + pieceLength - 1) / pieceLength)
@@ -104,7 +106,7 @@ func CheckPiece(fs FileStore, totalLength int64, m *MetaInfo, pieceIndex int) (g
 	if err != nil {
 		if err == os.ErrInvalid {
 			good = true
-			err = errors.New("Missing file for critical piece.")
+			err = missingPieceErr
 		}
 		return
 	}

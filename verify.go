@@ -160,14 +160,22 @@ func VerifyPartial(m *MetaInfo, root string) (bool, error) {
 		}
 	}
 	pieceNum := int((size + m.Info.PieceLength - 1) / m.Info.PieceLength)
+	p := 0
 	for i := 0; i < pieceNum; i++ {
 		g, err := CheckPiece(fs, size, m, i)
 		if g == false {
 			return false, err
 		}
 		if err != nil {
-			log.Println(err)
+			if err == missingPieceErr {
+				p++
+			} else {
+				log.Println(err)
+			}
 		}
+	}
+	if p > 0 {
+		log.Println(missingPieceErr, ":", p)
 	}
 	return true, nil
 }
