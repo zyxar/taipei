@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"code.google.com/p/bencode-go"
+	"code.google.com/p/mahonia"
 )
 
 type FileDict struct {
@@ -164,4 +166,22 @@ func DecodeMetaInfo(p []byte) (metaInfo *MetaInfo, err error) {
 
 	metaInfo = &m2
 	return
+}
+
+func Iconv(in *MetaInfo) *MetaInfo {
+	if len(in.Encoding) == 0 || strings.EqualFold(in.Encoding, "UTF-8") {
+		return in
+	}
+	dec := mahonia.NewDecoder(in.Encoding)
+	if v, ok := dec.ConvertStringOK(in.Info.Name); ok {
+		in.Info.Name = v
+	}
+	for i, _ := range in.Info.Files {
+		for j, _ := range in.Info.Files[i].Path {
+			if v, ok := dec.ConvertStringOK(in.Info.Files[i].Path[j]); ok {
+				in.Info.Files[i].Path[j] = v
+			}
+		}
+	}
+	return in
 }
