@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"code.google.com/p/bencode-go"
@@ -20,7 +21,7 @@ type FileDict struct {
 }
 
 func (f FileDict) String() string {
-	return fmt.Sprintf("%d\r\t\t%v\r\t\t\t\t%X", f.Length, f.Path, f.Md5sum)
+	return fmt.Sprintf("%d\r\t\t%v\r\t\t\t\t%X", f.Length, filepath.Join(f.Path...), f.Md5sum)
 }
 
 type InfoDict struct {
