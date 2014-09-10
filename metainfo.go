@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"code.google.com/p/bencode-go"
 	"code.google.com/p/mahonia"
+	"github.com/zyxar/taipei/vendor/bencode"
 )
 
 type FileDict struct {
