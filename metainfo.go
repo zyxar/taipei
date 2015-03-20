@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"code.google.com/p/mahonia"
+	"github.com/zyxar/mahonia"
 	"github.com/zyxar/taipei/vendor/bencode"
 )
 
