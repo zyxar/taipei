@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"bencode"
+	"github.com/jackpal/bencode-go"
 	"github.com/zyxar/mahonia"
 )
 
