@@ -1,10 +1,12 @@
+//+build ignore
+
 package main
 
 import (
 	"flag"
 	"fmt"
+
 	"github.com/zyxar/taipei"
-	// "io/ioutil"
 )
 
 func verify_bt(filename, path string) error {

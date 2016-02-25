@@ -11,7 +11,12 @@ import (
 	"strings"
 
 	"github.com/jackpal/bencode-go"
-	"github.com/zyxar/mahonia"
+	"golang.org/x/text/encoding"
+	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/encoding/korean"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/encoding/traditionalchinese"
+	"golang.org/x/text/encoding/unicode"
 )
 
 type FileDict struct {
@@ -169,17 +174,44 @@ func DecodeMetaInfo(p []byte) (metaInfo *MetaInfo, err error) {
 	return
 }
 
+func getDecoder(e string) *encoding.Decoder {
+	switch strings.ToLower(e) {
+	case "gbk":
+		return simplifiedchinese.GBK.NewDecoder()
+	case "gb2312":
+		return simplifiedchinese.HZGB2312.NewDecoder()
+	case "gb18030":
+		return simplifiedchinese.GB18030.NewDecoder()
+	case "big5":
+		return traditionalchinese.Big5.NewDecoder()
+	case "eucjp":
+		return japanese.EUCJP.NewDecoder()
+	case "iso2022jp":
+		return japanese.ISO2022JP.NewDecoder()
+	case "shiftjis":
+		return japanese.ShiftJIS.NewDecoder()
+	case "euckr":
+		return korean.EUCKR.NewDecoder()
+	case "utf-16le":
+		return unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewDecoder()
+	case "utf-16be":
+		return unicode.UTF16(unicode.BigEndian, unicode.IgnoreBOM).NewDecoder()
+	default:
+	}
+	return nil
+}
+
 func Iconv(in *MetaInfo) *MetaInfo {
-	if len(in.Encoding) == 0 || strings.EqualFold(in.Encoding, "UTF-8") {
+	dec := getDecoder(in.Encoding)
+	if dec == nil {
 		return in
 	}
-	dec := mahonia.NewDecoder(in.Encoding)
-	if v, ok := dec.ConvertStringOK(in.Info.Name); ok {
+	if v, err := dec.String(in.Info.Name); err == nil {
 		in.Info.Name = v
 	}
 	for i, _ := range in.Info.Files {
 		for j, _ := range in.Info.Files[i].Path {
-			if v, ok := dec.ConvertStringOK(in.Info.Files[i].Path[j]); ok {
+			if v, err := dec.String(in.Info.Files[i].Path[j]); err == nil {
 				in.Info.Files[i].Path[j] = v
 			}
 		}
