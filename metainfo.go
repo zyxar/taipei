@@ -211,6 +211,8 @@ func getDecoder(e string) *encoding.Decoder {
 		return japanese.ShiftJIS.NewDecoder()
 	case "euckr", "euc-kr", "ibm-1363", "ks_c_5601-1987", "ks_c_5601-1989", "ksc_5601", "korean", "iso-ir-149", "cp1363", "5601", "ksc", "windows-949", "ibm-970", "cp970", "970", "cp949":
 		return korean.EUCKR.NewDecoder()
+	case "utf-16", "utf16":
+		return unicode.UTF16(unicode.BigEndian, unicode.UseBOM).NewDecoder()
 	case "utf-16le", "utf16le":
 		return unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewDecoder()
 	case "utf-16be", "utf16be":
